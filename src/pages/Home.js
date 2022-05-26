@@ -1,8 +1,25 @@
 import {Link} from 'react-router-dom';
 import Header from '../components/Header';
+import {getAllCategories} from '../api/category';
+
+import {useState,useEffect} from 'react';
 function Home(){
 
-    let data=['Electronics','Fashion','Household','Appliances'];
+    const[categories,setCategories] = useState([]);
+
+  
+    const init = async() =>{
+        const result=await getAllCategories();
+        setCategories(result.data);
+        console.log(result.data);
+    }
+   console.log(categories);
+    useEffect(()=>{
+        init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
+   
   return (
     <div className="container">
         <Header/>
@@ -13,14 +30,19 @@ function Home(){
             <button className="btn btn-info mt-3">Show all products</button>
         </Link>
         <div className="d-flex " >
-        {data.map((item,index)=>(
+        {categories.map((category)=>(
+            <div className="col">
+                {console.log(category.id)}
             <div  className="card bg-dark  m-2 "
         
-            key={index}>
+            key={category.id}>
                 <div className="text-center fs-5 my-3"
-                    style={{width:190,height:50}}>
-                    <Link style={{textDecoration:"none", color:"white"}} to='/product'> {item}</Link>
+                    style={{width:190,height:100}}>
+                    <Link style={{textDecoration:"none", color:"white",fontSize:"30px"}} to='/product'> 
+                    {category.name}</Link>
                 </div>
+                   
+            </div>
             </div>
         ))}
         </div>
